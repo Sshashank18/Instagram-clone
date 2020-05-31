@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const { MONGOURI } = require('./config/credentials');
 
-const PORT = process.env.port || 4400;
+const PORT = process.env.PORT || 4400;
 
 mongoose.connect(MONGOURI,{                           //connect with the cloud mongo DB
     useNewUrlParser: true,
@@ -38,5 +38,5 @@ if(process.env.NODE_ENV === "production"){
 }
 
 app.listen(PORT, () => {
-    console.log('Server up and running at http://localhost:'+PORT);
+    console.log('Server up and running on',PORT);
 });
