@@ -10,6 +10,7 @@ import Profile from './components/screens/profile';
 import CreatePost from './components/screens/createPost';
 import UserProfile from './components/screens/UserProfile';
 import SubscribedUserPost from './components/screens/subscribedUserPosts';
+import Reset from './components/screens/ResetPassword';
 
 import {reducer, initialState} from './reducers/userReducer';
 
@@ -36,6 +37,7 @@ const Routing = () => {
       <Route path="/createPost" component={CreatePost}/>
       <Route path="/profile/:userid" component={UserProfile}/>
       <Route path="/myfollowingPosts" component={SubscribedUserPost}/>
+      <Route path="/reset" component={Reset}/>
     </Switch>
   );
 }
