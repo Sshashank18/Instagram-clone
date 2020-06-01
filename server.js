@@ -37,6 +37,8 @@ if(process.env.NODE_ENV === "production"){
     })
 }
 
+//Adding proxy in package.json of client folder helps in navigating to that port without the use of CORS
+
 app.listen(PORT, () => {
     console.log('Server up and running on',PORT);
 });

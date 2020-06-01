@@ -11,6 +11,7 @@ import CreatePost from './components/screens/createPost';
 import UserProfile from './components/screens/UserProfile';
 import SubscribedUserPost from './components/screens/subscribedUserPosts';
 import Reset from './components/screens/ResetPassword';
+import NewPassword from './components/screens/NewPassword';
 
 import {reducer, initialState} from './reducers/userReducer';
 
@@ -24,7 +25,8 @@ const Routing = () => {
     if(user){
       dispatch({type:"USER",payload:user});
     }else{
-      history.push('/signin');
+      if(!history.location.pathname.startsWith('/reset'))
+          history.push('/signin');
     }
   },[]);
 
@@ -37,7 +39,8 @@ const Routing = () => {
       <Route path="/createPost" component={CreatePost}/>
       <Route path="/profile/:userid" component={UserProfile}/>
       <Route path="/myfollowingPosts" component={SubscribedUserPost}/>
-      <Route path="/reset" component={Reset}/>
+      <Route path="/reset" exact component={Reset}/>
+      <Route path="/reset/:token" component={NewPassword}/>
     </Switch>
   );
 }

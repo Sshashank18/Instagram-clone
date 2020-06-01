@@ -6,20 +6,21 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const requireLogin = require('../middleware/requireLogin');
 const nodemailer = require('nodemailer');
-const sparkpostTransport = require('nodemailer-sparkpost-transport');
+const mailgunTransport = require('nodemailer-mailgun-transport');
 
 
 const { JWT_SECRET } = require('../config/credentials');
 
 const User = mongoose.model("User");
 
+const auth = {
+    auth: {
+      api_key: '365ed8d028418265c841a76aeebd8ace-9dfbeecd-9d59e229',
+      domain: 'sandboxd6da0211f79640febc04d2f80d6eef86.mailgun.org'
+    },
+};
 
-const transporter = nodemailer.createTransport(sparkpostTransport({
-    auth:{
-        api_key:"18c9a254fa4ef4bb6de607ac5f2e78c965e53d6c"
-    }
-}));
-
+const transporter = nodemailer.createTransport(mailgunTransport(auth));
 
 router.get('/protected',requireLogin,(req,res)=>{
     res.send("Hello");
@@ -49,9 +50,15 @@ router.post('/signup',(req,res)=>{
                     .then(user => {
                         transporter.sendMail({
                             to: user.email,
-                            from: "no-reply@insta.com",
+                            from: "no-reply@sandboxd6da0211f79640febc04d2f80d6eef86.mailgun.org",
                             subject: "Signup Success",
                             html:"<h1>Welcome to Instagram</h1>"
+                        },(err,info) => {
+                            if(err){
+                                console.log(err);
+                            }else{
+                                console.log(info);
+                            }
                         });
 
                         res.json({message: "saved successfully"})
@@ -71,7 +78,7 @@ router.post('/reset-password',(req, res)=>{
         if(err){
             console.log(err);
         }
-        const token = buffer.toStringify('hex');
+        const token = buffer.toString('hex');
         User.findOne({email: req.body.email})
         .then(user => {
             if(!user){
@@ -82,7 +89,7 @@ router.post('/reset-password',(req, res)=>{
             user.save().then(result => {
                 transporter.sendMail({
                     to:user.email,
-                    from:"no-reply@insta.com",
+                    from:"no-reply@sandboxd6da0211f79640febc04d2f80d6eef86.mailgun.org",
                     subject: "Password Reset",
                     html: `
                     <p>You requested for password reset</p>
@@ -94,6 +101,28 @@ router.post('/reset-password',(req, res)=>{
         });
     });
 });
+
+router.post('/new-password',(req,res)=>{
+    const newpassword = req.body.password;
+    const sentToken = req.body.token;
+    User.findOne({resetToken: sentToken, expireToken:{$gt: Date.now()}})
+    .then(user => {
+        if(!user){
+            return res.status(422).json({error:"Try Again Session Expired"});
+        }
+        bcrypt.hash(newpassword,12).then(hashedPassword => {
+            user.password = hashedPassword;
+            user.resetToken = undefined;
+            user.expireToken = undefined;
+            user.save().then(savedUser => {
+                res.json({message: "Password Updated Successfully"});
+            })
+        })
+    }).catch(err => {
+        return res.status(422).json({error:err});
+    });
+});
+
 
 router.post('/signin',(req,res) => {
     const {email, password} = req.body;
