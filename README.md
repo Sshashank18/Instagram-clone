@@ -1,5 +1,9 @@
 # Instagram Clone
 Instagram Clone is a Web-application which is a clone of famous social media platform Instagram (http://instagram.com).
+We can Create a Post, see other user's posts and my following posts.
+We can also update our Profile pic and can follow and unfollow other users.
+We can like and dislike on a post and can also give comments to the post.
+We can also search for a user.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
