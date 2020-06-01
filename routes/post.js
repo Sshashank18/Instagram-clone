@@ -9,6 +9,7 @@ router.get('/allPosts', requireLogin, (req,res) => {
     Post.find()
     .populate("postedBy","_id name pic")
     .populate("comments.postedBy","_id name")
+    .sort('-createdAt')                             // '-' is added to sort the post in descending order
     .then(posts => {
         res.json({posts});
     })
@@ -21,6 +22,7 @@ router.get('/mysubposts', requireLogin, (req,res) => {
     Post.find({postedBy: {$in: req.user.following}})
     .populate("postedBy","_id name pic")
     .populate("comments.postedBy","_id name")
+    .sort('-createdAt')                         
     .then(posts => {
         res.json({posts});
     })

@@ -9,14 +9,14 @@ const nodemailer = require('nodemailer');
 const mailgunTransport = require('nodemailer-mailgun-transport');
 
 
-const { JWT_SECRET } = require('../config/credentials');
+const { JWT_SECRET, MAILGUN_API, MAILGUN_DOMAIN, EMAIL } = require('../config/credentials');
 
 const User = mongoose.model("User");
 
 const auth = {
     auth: {
-      api_key: '365ed8d028418265c841a76aeebd8ace-9dfbeecd-9d59e229',
-      domain: 'sandboxd6da0211f79640febc04d2f80d6eef86.mailgun.org'
+      api_key: MAILGUN_API,
+      domain: MAILGUN_DOMAIN
     },
 };
 
@@ -93,7 +93,7 @@ router.post('/reset-password',(req, res)=>{
                     subject: "Password Reset",
                     html: `
                     <p>You requested for password reset</p>
-                    <h5>Click on this <a href="http://localhost:3000/reset/${token}">Link</a> to reset password.</h5>
+                    <h5>Click on this <a href="${EMAIL}/reset/${token}">Link</a> to reset password.</h5>
                     `
                 });
                 res.json({message: "Check your Email"});
