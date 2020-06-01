@@ -13,8 +13,13 @@ const Navbar = () => {
 
     useEffect(()=>{
         M.Modal.init(searchModal.current);
-        fetchUsers('');
     },[]);
+
+    useEffect(() => {
+        if(search === ''){
+            fetchUsers('');
+        }
+    },[search]);
 
     const fetchUsers = (query) => {
         setSearch(query);
@@ -75,13 +80,13 @@ const Navbar = () => {
                         onChange={(e)=>{fetchUsers(e.target.value)}}/>
                 </div>
                 <ul className="collection">
-                    {userDetails.map(item => {
+                    {state ? userDetails.map(item => {
                         return <Link key={item._id} to={item._id === state._id ? '/profile' : "/profile/" + item._id} onClick={() => {
                             M.Modal.getInstance(searchModal.current).close();
                             setSearch('');
                         }}><li className="collection-item"><img src={item.pic} style={{width:"25px",margin:"10px",float:"left",borderRadius:"80px"}} />
                             <h6>{item.name}</h6></li></Link>;
-                    })}
+                    }): null}
                 </ul>
                 <div className="modal-footer">
                     <button href="#!" className="modal-close waves-effect waves-green btn-flat" onClick={() => {setSearch('')}}>Close</button>
