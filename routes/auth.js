@@ -50,7 +50,7 @@ router.post('/signup',(req,res)=>{
                     .then(user => {
                         transporter.sendMail({
                             to: user.email,
-                            from: "no-reply@sandboxd6da0211f79640febc04d2f80d6eef86.mailgun.org",
+                            from: `no-reply@${MAILGUN_DOMAIN}`,
                             subject: "Signup Success",
                             html:"<h1>Welcome to Instagram</h1>"
                         },(err,info) => {
@@ -89,7 +89,7 @@ router.post('/reset-password',(req, res)=>{
             user.save().then(result => {
                 transporter.sendMail({
                     to:user.email,
-                    from:"no-reply@sandboxd6da0211f79640febc04d2f80d6eef86.mailgun.org",
+                    from:`no-reply@${MAILGUN_DOMAIN}`,
                     subject: "Password Reset",
                     html: `
                     <p>You requested for password reset</p>
