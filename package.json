@@ -16,6 +16,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.15",
     "nodemailer": "^6.4.8",
-    "nodemailer-mailgun-transport": "^2.0.0"
+    "nodemailer-mailgun-transport": "^2.1.5"
   }
 }
